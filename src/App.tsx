@@ -1,8 +1,7 @@
+import { Portfolio } from './components/Portfolio/Portfolio'
+
 function App() {
-  return (
-    <>
-    </>
-  )
+  return <Portfolio />
 }
 
 export default App
