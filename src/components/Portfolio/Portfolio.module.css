@@ -23,7 +23,9 @@
   font-family: var(--font-mono);
   background: var(--bg);
   color: var(--fg);
+  /* svh statt vh: 100vh ignoriert die iOS-Safari-Leisten und erzeugt Scroll. */
   min-height: 100vh;
+  min-height: 100svh;
   position: relative;
 }
 
@@ -89,6 +91,7 @@
 
 .hero {
   min-height: 100vh;
+  min-height: 100svh;
   display: flex;
   flex-direction: column;
   justify-content: center;

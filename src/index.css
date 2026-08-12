@@ -2,6 +2,14 @@
 
 :root {
   color-scheme: dark;
+
+  /* Scrollleiste ausblenden; Firefox und Standard. */
+  scrollbar-width: none;
+}
+
+/* Chrome, Safari, Edge. */
+::-webkit-scrollbar {
+  display: none;
 }
 
 body {
