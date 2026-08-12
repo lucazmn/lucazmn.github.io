@@ -3,6 +3,7 @@ import { useClock } from '../../hooks/useClock'
 import { useCursorPosition } from '../../hooks/useCursorPosition'
 import { useScrollPercent } from '../../hooks/useScrollPercent'
 import { useTypedName } from '../../hooks/useTypedName'
+import { useViewportSize } from '../../hooks/useViewportSize'
 import { useWeather } from '../../hooks/useWeather'
 import styles from './Portfolio.module.css'
 
@@ -16,6 +17,8 @@ export function Portfolio() {
   const scrollPct = useScrollPercent()
   const clock = useClock()
   const weather = useWeather()
+  const { width } = useViewportSize()
+  const deviceLabel = width <= 640 ? 'mobile' : 'desktop'
 
   const glowStyle: CursorVars = {
     '--cursor-x': `${cursorX}px`,
@@ -28,7 +31,7 @@ export function Portfolio() {
       <div className={styles.glow} style={glowStyle} />
 
       <div className={styles.topbar}>
-        <span>luca.zimmermann</span>
+        <span>{deviceLabel}</span>
         <span>
           {clock} · {weather}
         </span>
@@ -45,7 +48,7 @@ export function Portfolio() {
         </div>
       </section>
 
-      <div className={styles.bottombar}>
+      <div className={`${styles.bottombar} ${styles.desktopOnly}`}>
         <span>
           x:{cursorX} y:{cursorY}
         </span>
