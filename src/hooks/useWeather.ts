@@ -22,14 +22,16 @@ const WEATHER_CODES: Record<number, string> = {
   95: 'thunderstorm',
 }
 
+const MUNICH = { lat: 48.137, lon: 11.575 }
+
 export function useWeather() {
   const [weather, setWeather] = useState('weather: loading...')
 
   useEffect(() => {
-    const load = async (lat: number, lon: number) => {
+    const load = async () => {
       try {
         const res = await fetch(
-          `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`,
+          `https://api.open-meteo.com/v1/forecast?latitude=${MUNICH.lat}&longitude=${MUNICH.lon}&current_weather=true`,
         )
         const data = await res.json()
         const cw = data.current_weather
@@ -40,13 +42,7 @@ export function useWeather() {
       }
     }
 
-    load(52.52, 13.405)
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => load(pos.coords.latitude, pos.coords.longitude),
-        () => {},
-      )
-    }
+    load()
   }, [])
 
   return weather
