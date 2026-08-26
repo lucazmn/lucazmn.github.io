@@ -1,5 +1,14 @@
 @import "./styles/tokens.css";
 
+/* Polster und Rahmen zählen zur angegebenen Breite. Ohne das schießt jedes Element mit
+   width: 100% plus Polster über seinen Platz hinaus — die Inhaltsspalte etwa um ihre
+   beiden Seitenpolster, was am Handy rechts abgeschnitten wird. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 :root {
   color-scheme: dark;
 
@@ -12,6 +21,31 @@
   display: none;
 }
 
+/* Vom Homebildschirm gestartet soll sich die Seite wie eine App anfassen: kein
+   seitliches Wandern, kein Gummiband an den Rändern, keine Textvergrößerung beim
+   Drehen. overflow-x: clip statt hidden, damit sticky-Elemente weiter kleben —
+   und max-width verhindert, dass ein zu breites Kind die Seite überhaupt erst
+   aufzieht. */
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+  overscroll-behavior: none;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Der Hintergrund soll den ganzen Schirm decken, auch wenn eine Seite kürzer ist
+   als er. svh folgt dabei den ein- und ausfahrenden Leisten. */
+html {
+  min-height: 100%;
+}
+
+#root {
+  min-height: 100vh;
+  min-height: 100svh;
+}
+
 body {
   margin: 0;
   background: var(--color-bg);
@@ -19,4 +53,18 @@ body {
   font-family: var(--font-sans);
   font-size: var(--font-size-base);
   line-height: var(--line-height-base);
+}
+/* iOS wartet auf Tippflächen rund 300 ms, ob ein Doppeltipp zum Zoomen folgt.
+   manipulation schaltet den Doppeltipp-Zoom ab — der Tipp wirkt sofort.
+   Nicht global setzen: waagerecht scrollende Bereiche wie die Verlaufstabelle
+   brauchen ihr eigenes Verhalten. */
+button,
+input,
+label,
+select,
+textarea,
+a,
+[role='button'] {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
