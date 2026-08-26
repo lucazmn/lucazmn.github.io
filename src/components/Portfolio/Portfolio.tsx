@@ -11,7 +11,11 @@ const FULL_NAME = 'Luca Zimmermann'
 
 type CursorVars = CSSProperties & { '--cursor-x': string; '--cursor-y': string }
 
-export function Portfolio() {
+type PortfolioProps = {
+  onOpenZwanzigAb: () => void
+}
+
+export function Portfolio({ onOpenZwanzigAb }: PortfolioProps) {
   const typedName = useTypedName(FULL_NAME)
   const { x: cursorX, y: cursorY } = useCursorPosition()
   const scrollPct = useScrollPercent()
@@ -45,6 +49,12 @@ export function Portfolio() {
         </h1>
         <div className={styles.tagline}>
           <span className={styles.arrow}>&gt;</span> personal playground for code &amp; experiments
+        </div>
+
+        <div className={styles.actions}>
+          <button type="button" className={styles.next} onClick={onOpenZwanzigAb}>
+            $ cd zwanzig-ab-tracker <span className={styles.arrow}>&rarr;</span>
+          </button>
         </div>
       </section>
 

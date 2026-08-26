@@ -12,13 +12,13 @@
 }
 
 .page {
-  --bg: #0a0a0a;
-  --fg: #f5f5f0;
-  --fg-muted: #9a9a92;
-  --fg-dim: #8a8a82;
-  --fg-faint: #5a5a52;
-  --border: #4a4a42;
-  --grid-line: #161616;
+  --bg: var(--color-bg);
+  --fg: var(--color-text);
+  --fg-muted: var(--color-muted);
+  --fg-dim: var(--color-dim);
+  --fg-faint: var(--color-faint);
+  --border: var(--color-border);
+  --grid-line: var(--color-grid);
 
   font-family: var(--font-mono);
   background: var(--bg);
@@ -133,6 +133,29 @@
 
 .arrow {
   color: var(--border);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 40px;
+}
+
+.next {
+  align-self: flex-start;
+  background: none;
+  border: 1px solid var(--border);
+  padding: 10px 16px;
+  font: inherit;
+  font-size: 13px;
+  color: var(--fg-dim);
+  cursor: pointer;
+}
+
+.next:hover {
+  color: var(--fg);
+  border-color: var(--fg-dim);
 }
 
 .bottombar {

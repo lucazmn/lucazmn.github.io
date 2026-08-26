@@ -1,0 +1,703 @@
+/* Grundgröße jedes Symbols: folgt der Schriftgröße. Seiten können sie überschreiben. */
+.icon {
+  width: 1em;
+  height: 1em;
+  object-fit: contain;
+  flex: none;
+}
+
+/* Gemeinsames Gerüst aller Tracker-Seiten: Kopfzeile, Inhaltsspalte, Fußaktion.
+   Mobile-first — die Basisregeln gelten fürs Handy, breite Schirme bekommen die
+   Spalte nur zentriert und gedeckelt, kein eigenes Layout. */
+
+.page {
+  min-height: 100vh;
+  /* svh statt vh: 100vh ignoriert die iOS-Safari-Leisten und erzeugt Scroll. */
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-mono);
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-line);
+}
+
+/* Textknopf ohne Fläche — trotzdem mit voller Tippgröße. */
+.ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--tap-min);
+  padding: 0 var(--space-2);
+  margin-inline: calc(var(--space-2) * -1);
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: var(--text-sm);
+  letter-spacing: 0.02em;
+  color: var(--color-muted);
+  cursor: pointer;
+}
+
+.ghost:hover {
+  color: var(--color-text);
+}
+
+.content {
+  flex: 1;
+  width: 100%;
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding: var(--space-5) var(--space-4) var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--text-xl);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.meta {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.label {
+  margin: 0;
+  font-size: var(--text-sm);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-faint);
+}
+
+/* Eine Spalte: volle Breite pro Knopf, gut mit dem Daumen zu treffen. Die
+   Inhaltsspalte ist ohnehin gedeckelt, deshalb auch am Desktop keine andere Aufteilung. */
+.grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+}
+
+/* Auswahlknopf. Der ausgewählte Zustand hängt an aria-pressed — dieselbe Regel
+   gilt damit für Trumpffarben, Blind-Schalter, Stichzahlen und Namen im Pool. */
+.choice {
+  width: 100%;
+  min-height: var(--tap-min);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  cursor: pointer;
+  /* Icon links, Beschriftung mittig: die dritte Spalte bleibt leer und gleicht die
+     Breite des Icons aus, damit der Text wirklich in der Buttonmitte sitzt. */
+  display: grid;
+  grid-template-columns: 1.25em 1fr 1.25em;
+  align-items: center;
+  gap: var(--space-3);
+  text-align: center;
+  transition:
+    background 120ms ease,
+    border-color 120ms ease;
+}
+
+/* Ausgewählte Knöpfe vom Hover ausnehmen: sonst gewinnt diese Regel wegen höherer
+   Spezifität und überschreibt den hellen Hintergrund der Auswahl — die Schrift bliebe
+   dunkel und stünde dann auf dunklem Grund. Am Handy klebt Hover nach dem Tippen. */
+.choice:hover:not(:disabled):not([aria-pressed='true']) {
+  background: var(--color-surface-strong);
+  border-color: var(--color-muted);
+}
+
+.choice[aria-pressed='true'] {
+  background: var(--color-text);
+  border-color: var(--color-text);
+  color: var(--color-bg);
+}
+
+.choice:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* Kleiner Zusatzknopf, der sich einer Auswahl unterordnet (Herz-Blind). */
+.subChoice {
+  composes: choice;
+  min-height: auto;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+}
+
+.subChoice[aria-pressed='true'] {
+  color: var(--color-bg);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* Hauptaktion klebt unten, damit sie am Handy im Daumenbereich bleibt. */
+.actions {
+  position: sticky;
+  bottom: 0;
+  padding: var(--space-4);
+  padding-bottom: calc(var(--space-4) + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, var(--color-bg) 65%, transparent);
+}
+
+.actionsInner {
+  width: 100%;
+  max-width: var(--content-max);
+  margin-inline: auto;
+}
+
+.primary {
+  width: 100%;
+  min-height: var(--tap-min);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  border: 1px solid var(--color-text);
+  border-radius: var(--radius-md);
+  background: var(--color-text);
+  color: var(--color-bg);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.primary:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.secondary {
+  composes: primary;
+  background: none;
+  border-color: var(--color-line);
+  color: var(--color-text);
+  font-weight: 400;
+}
+
+/* Eingabezeile: Feld plus Knopf nebeneinander. */
+.field {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  min-height: var(--tap-min);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  /* Unter 16px zoomt iOS beim Antippen automatisch in die Seite hinein. */
+  font-size: 1rem;
+}
+
+.input::placeholder {
+  color: var(--color-faint);
+}
+
+.input:focus-visible {
+  outline: 1px solid var(--color-muted);
+  outline-offset: -1px;
+}
+
+.iconButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--tap-min);
+  min-height: var(--tap-min);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.iconButton:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* Spielerzeile auf der Stiche-Seite. */
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.rowHead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  cursor: pointer;
+}
+
+.score {
+  flex: none;
+  width: var(--tap-min);
+  height: var(--tap-min);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text);
+}
+
+.name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Stichzahlen 0–5 in einer Reihe. */
+.numbers {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--space-2);
+}
+
+.num {
+  min-height: var(--tap-min);
+  border: 2px solid var(--color-line);
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--color-muted);
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.num[aria-pressed='true'] {
+  background: none;
+  border-color: var(--color-text);
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.errors {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+}
+
+.note {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-faint);
+}
+
+/* Breite Tabellen scrollen in sich, damit die Seite nicht seitlich wandert. */
+.tableWrap {
+  overflow-x: auto;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.table th,
+.table td {
+  padding: var(--space-3);
+  text-align: left;
+  border-bottom: 1px solid var(--color-line);
+  /* Senkrechte Trenner zwischen den Spielerspalten. */
+  border-right: 1px solid var(--color-line);
+}
+
+.table th:last-child,
+.table td:last-child {
+  border-right: none;
+}
+
+.table tbody tr:last-child th,
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table thead th {
+  background: var(--color-surface-strong);
+  color: var(--color-faint);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+
+/* Rundennummer als ruhige Randspalte. */
+.table tbody th {
+  color: var(--color-muted);
+  font-weight: 400;
+}
+
+/* Zellen der Spieler: der Stand führt, die Stiche stehen klein und gedimmt in
+   Klammern dahinter — zwei Zahlen nebeneinander sollen nicht als eine gelesen
+   werden können. */
+.cellScore {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.cellTricks {
+  margin-left: 0.35em;
+  font-size: 0.8em;
+  color: var(--color-faint);
+}
+
+/* Nur für Vorlesehilfen sichtbar. */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Punktestand-Chips auf der Trumpfwahl: eine Reihe in Sitzreihenfolge. Sie brechen
+   um statt seitlich zu scrollen — die Seite selbst soll nie waagerecht wandern. */
+.chips {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.chip {
+  flex: 1 1 auto;
+  min-width: 4.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+}
+
+.chipName {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+}
+
+/* Stand und Regelsymbole in einer Zeile: der Chip bleibt dadurch zweizeilig, auch
+   wenn keine Regel greift und die Symbole fehlen. */
+.chipBottom {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.chipScore {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text);
+}
+
+/* Im Chip kleiner als in der Spielerzeile — dort tragen sie eine ganze Zeile, hier
+   ordnen sie sich der Zahl unter. */
+.chipBottom .badgeIcon {
+  font-size: 1rem;
+}
+
+/* Trumpfwahl als 2x2-Raster aus quadratischen Kacheln: die wichtigste Fläche der
+   Runde, mit dem Icon über der Beschriftung. */
+.boxes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
+}
+
+.box {
+  width: 100%;
+  /* Etwas höher als breit, aber nicht mehr so hochkant wie früher. Den Platz für die
+     Blind-Checkbox schafft jetzt das untere Polster statt der Kachelform — so bleibt
+     das Motiv frei, auch wenn die Kachel schrumpft. */
+  aspect-ratio: 3 / 4;
+  padding-bottom: calc(var(--tap-min) + var(--space-4));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  overflow: hidden;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  font-size: var(--text-lg);
+  text-align: center;
+  cursor: pointer;
+  transition:
+    background 120ms ease,
+    border-color 120ms ease;
+}
+
+/* Ohne Beschriftung füllt das Motiv die Kachel — der Name steckt im aria-label.
+   Höhere Spezifität als .icon, deshalb gewinnt diese Regel. */
+.box .icon {
+  width: 85%;
+  height: 65%;
+}
+
+.box:hover:not([aria-pressed='true']) {
+  background: var(--color-surface-strong);
+  border-color: var(--color-muted);
+}
+
+.box[aria-pressed='true'] {
+  background: var(--color-text);
+  border-color: var(--color-text);
+  color: var(--color-bg);
+}
+
+/* Die Blind-Checkbox liegt als Geschwister über der Kachel, nicht darin: ein
+   Ankreuzfeld innerhalb eines <button> wäre ungültiges HTML, und so löst ein Tipp
+   darauf auch nicht die Kachel aus. */
+.boxCell {
+  position: relative;
+}
+
+.boxToggle {
+  position: absolute;
+  left: var(--space-2);
+  bottom: var(--space-2);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  font-size: 1.05rem;
+  color: var(--color-muted);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* Selbst gezeichnet statt Systemdarstellung: nur so lassen sich Ecken, Größe und
+   Farben festlegen — und es sieht auf iOS wie auf Android gleich aus. */
+.check {
+  appearance: none;
+  margin: 0;
+  flex: none;
+  /* Gleiches Maß und gleiche Rundung wie der Zurück-Pfeil — beide sind gleich
+     große Tippflächen und sollen sich auch so anfühlen. */
+  width: var(--tap-min);
+  height: var(--tap-min);
+  display: grid;
+  place-content: center;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  cursor: pointer;
+  transition:
+    background 120ms ease,
+    border-color 120ms ease;
+}
+
+/* Das Häkchen ist eine gedrehte Ecke aus zwei Rahmenlinien, kein Bild. */
+.check::after {
+  content: '';
+  width: 0.5rem;
+  height: 0.95rem;
+  border: solid var(--color-bg);
+  border-width: 0 2px 2px 0;
+  transform: translateY(-2px) rotate(45deg) scale(0);
+  transition: transform 120ms ease;
+}
+
+.check:checked {
+  background: var(--color-text);
+  border-color: var(--color-text);
+}
+
+.check:checked::after {
+  transform: translateY(-2px) rotate(45deg) scale(1);
+}
+
+.check:focus-visible {
+  outline: 1px solid var(--color-muted);
+  outline-offset: 2px;
+}
+
+.check:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* Symbol-Vermerk hinter dem Namen, etwa das Tauschverbot. */
+/* Rot: beide Vermerke sind Zwänge, die der Spieler nicht abwählen kann — das soll man
+   am Tisch sofort sehen, auch wenn man gerade nicht auf die Zahl daneben achtet. */
+.badgeIcon {
+  display: inline-flex;
+  flex: none;
+  font-size: 1.25rem;
+  color: var(--color-alert);
+}
+
+/* Stichzähler im Weiter-Knopf — zurückhaltender als die Beschriftung daneben. */
+.primaryCount {
+  font-variant-numeric: tabular-nums;
+  opacity: 0.65;
+}
+
+/* Pfeil für den Schritt zurück — sitzt im Inhalt, nicht in der Kopfzeile, damit er
+   nicht mit dem Weg ins Hauptmenü verwechselt wird. */
+.stepBack {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--tap-min);
+  height: var(--tap-min);
+  margin-bottom: calc(var(--space-3) * -1);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-muted);
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+.stepBack:hover {
+  color: var(--color-text);
+  border-color: var(--color-muted);
+}
+
+/* Pokal über dem Siegernamen. */
+.winnerIcon {
+  display: inline-flex;
+  flex: none;
+  font-size: 2.5rem;
+  color: var(--color-gold);
+}
+
+/* Trumpf-Kopf auf der Stiche-Seite: Bild neben dem Namen der Ansage. */
+.trumpHead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.trumpHead .icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  flex: none;
+}
+
+/* Pool-Zeile: Auswahlknopf nimmt den Platz, Löschknopf sitzt rechts daneben. */
+.poolRow {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.poolRow .choice {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Rückfrage-Dialog. */
+.dialogBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+  background: rgb(0 0 0 / 0.65);
+}
+
+.dialogBox {
+  width: 100%;
+  max-width: 22rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-5);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.dialogText {
+  margin: 0;
+  line-height: 1.4;
+}
+
+.dialogActions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
