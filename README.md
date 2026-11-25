@@ -1,6 +1,6 @@
 # lucazmn.github.io
 
-Personal site, built with React + Vite, deployed to GitHub Pages via GitHub Actions.
+Personal site, built with React + Vite, deployed to GitHub Pages via GitHub Actions..
 
 ## Development
 
